@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { DevicesService } from './devices.service';
 import { CreateDeviceDto } from './dto/create-device.dto';
 import { UpdateDeviceDto } from './dto/update-device.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('devices')
+@UseGuards(AuthGuard('jwt'))
 export class DevicesController {
   constructor(private readonly devicesService: DevicesService) {}
 
