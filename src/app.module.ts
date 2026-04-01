@@ -8,9 +8,10 @@ import { EventsModule } from './events/events.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { UsersModule } from './users/users.module';
 import { TenantsModule } from './tenants/tenants.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), PrismaModule, DevicesModule, EventsModule, DashboardModule, UsersModule, TenantsModule],
+  imports: [ConfigModule.forRoot(), PrismaModule, DevicesModule, EventsModule, DashboardModule, UsersModule, TenantsModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
