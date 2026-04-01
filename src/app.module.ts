@@ -5,9 +5,10 @@ import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { DevicesModule } from './devices/devices.module';
 import { EventsModule } from './events/events.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), PrismaModule, DevicesModule, EventsModule],
+  imports: [ConfigModule.forRoot(), PrismaModule, DevicesModule, EventsModule, DashboardModule],
   controllers: [AppController],
   providers: [AppService],
 })
