@@ -1,7 +1,12 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
 
 @Controller('dashboard')
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
+
+  @Get(':tenantId')
+  getStats(@Param('tenantId') tenantId: string) {
+    return this.dashboardService.getTenantStats(tenantId);
+  }
 }
