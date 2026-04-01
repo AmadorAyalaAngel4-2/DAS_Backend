@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { DevicesModule } from './devices/devices.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
-  imports: [PrismaModule, DevicesModule],
+  imports: [ConfigModule.forRoot(), PrismaModule, DevicesModule, EventsModule],
   controllers: [AppController],
   providers: [AppService],
 })
