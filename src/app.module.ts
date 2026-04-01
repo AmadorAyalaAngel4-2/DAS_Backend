@@ -11,8 +11,8 @@ import { TenantsModule } from './tenants/tenants.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), PrismaModule, DevicesModule, EventsModule, DashboardModule, UsersModule, TenantsModule, AuthModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), PrismaModule, DevicesModule, EventsModule, DashboardModule, UsersModule, TenantsModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
