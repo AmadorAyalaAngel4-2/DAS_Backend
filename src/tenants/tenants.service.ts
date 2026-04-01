@@ -1,26 +1,58 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTenantDto } from './dto/create-tenant.dto';
 import { UpdateTenantDto } from './dto/update-tenant.dto';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class TenantsService {
-  create(createTenantDto: CreateTenantDto) {
-    return 'This action adds a new tenant';
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createTenantDto: CreateTenantDto) {
+    return await this.prisma.tenant.create({
+      data: {
+        name: createTenantDto.name,
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all tenants`;
+  async findAll() {
+    return await this.prisma.tenant.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tenant`;
+  async findOne(id: string) {
+    const tenant = await this.prisma.tenant.findUnique({
+      where: { id },
+      include: {
+        devices: true,
+        users: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    if (!tenant) {
+      throw new NotFoundException(`La empresa con ID ${id} no existe.`);
+    }
+
+    return tenant;
   }
 
-  update(id: number, updateTenantDto: UpdateTenantDto) {
-    return `This action updates a #${id} tenant`;
+  async update(id: string, updateTenantDto: UpdateTenantDto) {
+    return await this.prisma.tenant.update({
+      where: { id },
+      data: updateTenantDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} tenant`;
+  async remove(id: string) {
+    return await this.prisma.tenant.delete({
+      where: { id },
+    });
   }
 }
