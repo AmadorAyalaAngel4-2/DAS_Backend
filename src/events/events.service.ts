@@ -1,10 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEventDto } from './dto/create-event.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { NotificationsGateway } from 'src/notifications/notifications.gateway';
 
 @Injectable()
 export class EventsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly notificationsGateway: NotificationsGateway) {}
 
   async create(createEventDto: CreateEventDto) {
     const device = await this.prisma.device.findFirst({
@@ -15,7 +16,7 @@ export class EventsService {
       throw new NotFoundException(`Dispositivo con hardwareId ${createEventDto.hardwareId} no registrado.`);
     }
 
-    return await this.prisma.eventLog.create({
+    const newEvent = await this.prisma.eventLog.create({
       data: {
         action: createEventDto.action,
         color: createEventDto.color,
@@ -23,6 +24,10 @@ export class EventsService {
         tenantId: device.tenantId,
       },
     });
+
+    this.notificationsGateway.emitNewEvent(newEvent);
+
+    return newEvent
   }
 
   async findAll() {
